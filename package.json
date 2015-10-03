@@ -1,0 +1,29 @@
+{
+  "name": "motbot",
+  "version": "0.1.0",
+  "description": "Proxy Between mozk telegram group and mozk irc channel",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Waterloo/mot.git"
+  },
+  "keywords": [
+    "Telegram",
+    "IRC"
+  ],
+  "author": "Mozk Liaison",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Waterloo/mot/issues"
+  },
+  "homepage": "https://github.com/Waterloo/mot#readme",
+  "dependencies": {
+    "dotenv": "^1.2.0",
+    "irc": "^0.4.0",
+    "node-telegram-bot-api": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
