@@ -1,5 +1,5 @@
 var irc = require('irc');
-var env = process.env;
+var env = require('config.js');
 var TelegramBot = require('node-telegram-bot-api');
 
 //setting up irc configs
