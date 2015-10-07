@@ -2,6 +2,19 @@ var irc = require('irc');
 var env = require('./config.js');
 var fs = require('fs');
 var Bot = require('node-telegram-bot');
+var moment = require('moment');
+var filename = '';
+
+filename = './logs/' + moment().format('DDMMMYY') + '.txt';
+console.log(filename);
+
+//options for logging
+var options = {
+    encoding: 'utf8',
+    flags: 'a'
+};
+var wstream;
+wstream = fs.createWriteStream(filename, options);
 
 //reading meeting status in sync 
 var meeting_status = fs.readFileSync('./mod', 'ascii');
@@ -21,6 +34,8 @@ client.addListener('message', function (from, to, message) {
         chat_id: env.tg_chatId,
         text: from + ': ' + message
     })
+    
+    add_log(from + ': ' + message+'\n')
 });
 
 client.addListener('error', function (message) {
@@ -57,6 +72,8 @@ var bot = new Bot({
 
     default:
         send(message);
+
+
     }
 }).start();
 
@@ -77,6 +94,8 @@ function send(message) {
     }
 
     client.say('#kerala_testing', msg);
+    msg += '\n';
+    add_log(msg);
     console.log(message);
 
 }
@@ -89,6 +108,12 @@ function startmeeting(from) {
     }
 
     meeting_status = 'on';
+
+    //start logging to file
+    filename = './logs/' + moment().format('DDMMMYY') + '.txt';
+
+    wstream = fs.createWriteStream(filename, options);
+
     fs.writeFile('./mod', 'on', 'ascii', function (err) {
         //if error retry startmeeting
         if (err) {
@@ -110,6 +135,8 @@ function stopmeeting(from) {
     }
 
     meeting_status = 'off';
+
+
     //write status to mod file
     fs.writeFile('./mod', 'off', 'ascii', function (err) {
         //if error retry stopmeeting
@@ -120,6 +147,9 @@ function stopmeeting(from) {
                 chat_id: env.tg_chatId,
                 text: 'Meeting Stopped '
             })
+
+            //stop logging to file
+            wstream.end();
         }
     });
 }
@@ -130,4 +160,12 @@ function send_status() {
         parse_mode: 'Markdown',
         text: 'Meeting mode *' + meeting_status.toUpperCase() + '*'
     })
+}
+
+
+
+function add_log(msg) {
+
+    wstream.write(msg);
+
 }
