@@ -1,0 +1,32 @@
+Bruce: test
+Riddler: test2
+Bruce: /stop
+Admin: A Meeting was just started by admin at 10:50 PM on 07 Oct 15
+
+The agenda of the meeting is at https://kerala.etherpad-mozilla.org/07Oct15
+
+You better be civil from now onwards because I'm logging everything you say.
+
+I'll tell you where to find the log after the meeting ends.
+Riddler: hello
+Admin: A Meeting was just started by admin at 10:51 PM on 07 Oct 15
+
+The agenda of the meeting is at https://kerala.etherpad-mozilla.org/07Oct15
+
+You better be civil from now onwards because I'm logging everything you say.
+
+I'll tell you where to find the log after the meeting ends.
+Admin: A Meeting was just started by admin at 10:54 PM on 07 Oct 15
+
+The agenda of the meeting is at https://kerala.etherpad-mozilla.org/07Oct15
+
+You better be civil from now onwards because I'm logging everything you say.
+
+I'll tell you where to find the log after the meeting ends.
+Admin: A Meeting was just started by admin at 10:55 PM on 07 Oct 15
+
+The agenda of the meeting is at https://kerala.etherpad-mozilla.org/07Oct15
+
+You better be civil from now onwards because I'm logging everything you say.
+
+I'll tell you where to find the log after the meeting ends.

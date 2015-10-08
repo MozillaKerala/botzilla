@@ -5,25 +5,37 @@ var Bot = require('node-telegram-bot');
 var moment = require('moment');
 var filename = '';
 
+var meeting_time = moment().format('hh:mm A');
+var meeting_date = moment().format('DD MMM YY');
+var meeting_link ='https://kerala.etherpad-mozilla.org/'+ moment().format('DDMMMYY');
+var meeting_logs =' logs.mozillakerala.org/'+ moment().format('DDMMMYY');
+var wstream;
+
+
 filename = './logs/' + moment().format('DDMMMYY') + '.txt';
 console.log(filename);
+
 
 //options for logging
 var options = {
     encoding: 'utf8',
     flags: 'a'
 };
-var wstream;
+
+
 wstream = fs.createWriteStream(filename, options);
 
 //reading meeting status in sync 
 var meeting_status = fs.readFileSync('./mod', 'ascii');
+
 //setting up irc configs
 var client = new irc.Client(env.server, env.nick, {
     channels: [
     env.channel
   ]
 });
+
+
 
 //listening for messages from IRC
 client.addListener('message', function (from, to, message) {
@@ -34,13 +46,18 @@ client.addListener('message', function (from, to, message) {
         chat_id: env.tg_chatId,
         text: from + ': ' + message
     })
-    
-    add_log(from + ': ' + message+'\n')
+
+    add_log(from + ': ' + message + '\n')
 });
 
+
+//log errors
 client.addListener('error', function (message) {
     console.log('error: ', message);
 });
+
+
+
 
 var bot = new Bot({
     token: env.tgbot_token
@@ -49,6 +66,7 @@ var bot = new Bot({
     if (!message.text) {
         return;
     }
+
     var command = (message.text.split('/')[1]);
 
     if (command) {
@@ -78,6 +96,8 @@ var bot = new Bot({
 }).start();
 
 
+
+
 //send Message to IRC
 function send(message) {
     var msg;
@@ -93,7 +113,7 @@ function send(message) {
 
     }
 
-    client.say('#kerala_testing', msg);
+    client.say(env.channel, msg);
     msg += '\n';
     add_log(msg);
     console.log(message);
@@ -119,12 +139,31 @@ function startmeeting(from) {
         if (err) {
             startmeeting(from);
         } else {
+
+
+            meeting_time = moment().format('hh:mm A');
+            meeting_date = moment().format('DD MMM YY');
+            meeting_link ='https://kerala.etherpad-mozilla.org/' + moment().format('DDMMMYY');
+
+
+
+
+            var meeting_msg = strformat("A Meeting was just started by admin at %time% on %date%\n\nThe agenda of the meeting is at %datelink%\n\nYou better be civil from now onwards because I'm logging everything you say.\n\nI'll tell you where to find the log after the meeting ends.", {
+                time:meeting_time ,
+                date: meeting_date,
+                datelink:meeting_link
+            });
+
             bot.sendMessage({
                 chat_id: env.tg_chatId,
-                text: 'Meeting Started '
+                text: meeting_msg
             })
+
+            send({from:{first_name:'Admin'},text:meeting_msg});
+
         }
     });
+
 }
 
 
@@ -143,11 +182,23 @@ function stopmeeting(from) {
         if (err) {
             startmeeting(from);
         } else {
+            
+            
+                        var meeting_msg = strformat("The meeting that Admin started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
+                time:meeting_time ,
+                date: meeting_date,
+                loglink:meeting_logs
+            });
+            
+            send({from:{first_name:'Admin'},text:meeting_msg});
+            
             bot.sendMessage({
                 chat_id: env.tg_chatId,
-                text: 'Meeting Stopped '
+                text: meeting_msg
             })
 
+
+            
             //stop logging to file
             wstream.end();
         }
@@ -168,4 +219,16 @@ function add_log(msg) {
 
     wstream.write(msg);
 
+}
+
+function strformat(str, obj) {
+
+    for (key in obj) {
+
+        str = str.replace(new RegExp('%' + key + '%', 'g'), obj[key]);
+
+
+    }
+
+    return str;
 }
