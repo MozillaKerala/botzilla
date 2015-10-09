@@ -7,7 +7,7 @@ var filename = '';
 
 var meeting_time = moment().format('hh:mm A');
 var meeting_date = moment().format('DD MMM YY');
-var meeting_link ='https://kerala.etherpad-mozilla.org/'+ moment().format('DDMMMYY');
+var meeting_link ='https://public.etherpad-mozilla.org/kerala-'+ moment().format('DDMMMYY');
 var meeting_logs =' logs.mozillakerala.org/'+ moment().format('DDMMMYY');
 var wstream;
 
