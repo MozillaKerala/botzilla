@@ -143,7 +143,7 @@ function startmeeting(from) {
 
             meeting_time = moment().format('hh:mm A');
             meeting_date = moment().format('DD MMM YY');
-            meeting_link ='https://kerala.etherpad-mozilla.org/' + moment().format('DDMMMYY');
+            meeting_link ='https://public.etherpad-mozilla.org/kerala-' + moment().format('DDMMMYY');
 
 
 
