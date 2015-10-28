@@ -148,10 +148,11 @@ function startmeeting(from) {
 
 
 
-            var meeting_msg = strformat("A Meeting was just started by admin at %time% on %date%\n\nThe agenda of the meeting is at %datelink%\n\nYou better be civil from now onwards because I'm logging everything you say.\n\nI'll tell you where to find the log after the meeting ends.", {
+            var meeting_msg = strformat("A Meeting was just started by %admin_name% at %time% on %date%\n\nThe agenda of the meeting is at %datelink%\n\nYou better be civil from now onwards because I'm logging everything you say.\n\nI'll tell you where to find the log after the meeting ends.", {
                 time:meeting_time ,
                 date: meeting_date,
-                datelink:meeting_link
+                datelink:meeting_link,
+admin_name:env.admin_name
             });
 
             bot.sendMessage({
@@ -159,7 +160,7 @@ function startmeeting(from) {
                 text: meeting_msg
             })
 
-            send({from:{first_name:'Admin'},text:meeting_msg});
+            send({from:{first_name:env.admin_name},text:meeting_msg});
 
         }
     });
@@ -184,13 +185,14 @@ function stopmeeting(from) {
         } else {
             
             
-                        var meeting_msg = strformat("The meeting that Admin started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
+                        var meeting_msg = strformat("The meeting that %admin_name% started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
                 time:meeting_time ,
                 date: meeting_date,
-                loglink:meeting_logs
+                loglink:meeting_logs,
+admin_name:env.admin_name
             });
             
-            send({from:{first_name:'Admin'},text:meeting_msg});
+            send({from:{first_name:env.admin_name},text:meeting_msg});
             
             bot.sendMessage({
                 chat_id: env.tg_chatId,
