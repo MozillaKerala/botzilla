@@ -7,14 +7,14 @@ var filename = '';
 
 var meeting_time = moment().format('hh:mm A');
 var meeting_date = moment().format('DD MMM YY');
-var meeting_link ='https://public.etherpad-mozilla.org/kerala-'+ moment().format('DDMMMYY');
+var meeting_link ='https://public.etherpad-mozilla.org/p/kerala-'+ moment().format('DDMMMYY');
 var meeting_logs =' logs.mozillakerala.org/'+ moment().format('DDMMMYY');
 var wstream;
 
 
 filename = './logs/' + moment().format('DDMMMYY') + '.txt';
 console.log(filename);
-
+wstream = fs.createWriteStream(filename, options);
 
 //options for logging
 var options = {
@@ -23,7 +23,6 @@ var options = {
 };
 
 
-wstream = fs.createWriteStream(filename, options);
 
 //reading meeting status in sync 
 var meeting_status = fs.readFileSync('./mod', 'ascii');
@@ -143,7 +142,7 @@ function startmeeting(from) {
 
             meeting_time = moment().format('hh:mm A');
             meeting_date = moment().format('DD MMM YY');
-            meeting_link ='https://public.etherpad-mozilla.org/kerala-' + moment().format('DDMMMYY');
+            meeting_link ='https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
 
 
 
