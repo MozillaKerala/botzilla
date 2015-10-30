@@ -35,7 +35,7 @@ Open the Config.js with your favorite text editor and edit the keys according to
 module.exports = {
     tgbot_token: 'bot token you got',
     tgbot_name: '@username of yourbot',
-    tg_chatId: -'Chat id of your telegram group',
+    tg_chatId: 'Chat id of your telegram group',
     server: 'irc network eg: irc.mozilla.org',
     channel: 'irc channel name eg:#kerala_testing',
     nick: 'nick name to use by the bot in IRC eg:botzilla',
