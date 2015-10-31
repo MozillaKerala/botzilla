@@ -8,7 +8,7 @@ var filename = '';
 var meeting_time = moment().format('hh:mm A');
 var meeting_date = moment().format('DD MMM YY');
 var meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
-var meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY');
+var meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY')+'.txt';
 var wstream;
 
 
@@ -160,7 +160,7 @@ function startmeeting(from) {
             meeting_time = moment().format('hh:mm A');
             meeting_date = moment().format('DD MMM YY');
             meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
-            meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY');
+            meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY')+'.txt';
 
 
 
