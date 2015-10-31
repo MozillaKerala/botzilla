@@ -1,11 +1,12 @@
-# botzilla
+# Botzilla
 The bot that lives in #kerala on MozNet (Mozilla) IRC and the Mozilla Kerala Telegram group.
 
+for Running Botzilla you need:
+
+    Node.js
 
 
-
-
-#### Bot on Telegram
+#### Creating Bot on Telegram
 
 **Step 1**
 On Telegram, open the @BotFather profile, and start to talk with “him”. You can open the conversation by [clicking here](https://telegram.me/botfather). If the screen remains empty, update your Telegram client, or write “/start”
@@ -27,7 +28,7 @@ git clone https://github.com/MozillaKerala/botzilla.git
 ```
 
 
-** Step2 **
+**Step 2**
 
 Open the Config.js with your favorite text editor and edit the keys according to your requirement
 
@@ -48,7 +49,7 @@ module.exports = {
 
 
 **Step 3**
-Run the following command on your terminal
+to start botzilla Run the following command on your terminal
 
 ```
 node index.js
