@@ -14,7 +14,6 @@ var wstream;
 
 filename = './logs/' + moment().format('DDMMMYY') + '.txt';
 console.log(filename);
-wstream = fs.createWriteStream(filename, options);
 
 //options for logging
 var options = {
@@ -22,6 +21,8 @@ var options = {
     flags: 'a'
 };
 
+
+wstream = fs.createWriteStream(filename, options);
 
 
 //reading meeting status in sync 
