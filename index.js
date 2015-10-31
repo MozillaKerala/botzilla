@@ -7,8 +7,8 @@ var filename = '';
 
 var meeting_time = moment().format('hh:mm A');
 var meeting_date = moment().format('DD MMM YY');
-var meeting_link ='https://public.etherpad-mozilla.org/p/kerala-'+ moment().format('DDMMMYY');
-var meeting_logs =' logs.mozillakerala.org/'+ moment().format('DDMMMYY');
+var meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
+var meeting_logs = ' logs.mozillakerala.org/' + moment().format('DDMMMYY');
 var wstream;
 
 
@@ -102,9 +102,25 @@ function send(message) {
     var msg;
     if (meeting_status == 'off')
         return;
+
+    //if the message is a reply , show (first_name in response to username)
     if (message.reply_to_message) {
 
-        msg = message.from.first_name + '(in reply to ' + message.reply_to_message.from.first_name + '): ' + message.text;
+        //if reply is to a botzilla message then parse name from the message
+        if (message.reply_to_message.from.first_name == env.tgbot_name.replace('@', '')) {
+
+            msg = message.from.first_name + '(in reply to ' + message.reply_to_message.from.first_name + ') : ' + message.text;
+
+        } else {
+            //Regular Expression to parse names from botzilla message
+            var reply_to = message.reply_to_message.text.match(/((?:[a-z0-9_@]+):+)/i);
+            if (reply_to != undefined) {
+                console.log('here');
+                msg = message.from.first_name + '(in reply to ' + reply_to[0] + ') : ' + message.text;
+            } else
+                msg = message.from.first_name + '(in reply to ' + message.reply_to_message.from.first_name + ') : ' + message.text;
+        }
+
 
     } else {
 
@@ -142,16 +158,16 @@ function startmeeting(from) {
 
             meeting_time = moment().format('hh:mm A');
             meeting_date = moment().format('DD MMM YY');
-            meeting_link ='https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
+            meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
 
 
 
 
             var meeting_msg = strformat("A Meeting was just started by %admin_name% at %time% on %date%\n\nThe agenda of the meeting is at %datelink%\n\nYou better be civil from now onwards because I'm logging everything you say.\n\nI'll tell you where to find the log after the meeting ends.", {
-                time:meeting_time ,
+                time: meeting_time,
                 date: meeting_date,
-                datelink:meeting_link,
-admin_name:env.admin_name
+                datelink: meeting_link,
+                admin_name: env.admin_name
             });
 
             bot.sendMessage({
@@ -159,7 +175,12 @@ admin_name:env.admin_name
                 text: meeting_msg
             })
 
-            send({from:{first_name:env.admin_name},text:meeting_msg});
+            send({
+                from: {
+                    first_name: env.admin_name
+                },
+                text: meeting_msg
+            });
 
         }
     });
@@ -182,24 +203,29 @@ function stopmeeting(from) {
         if (err) {
             startmeeting(from);
         } else {
-            
-            
-                        var meeting_msg = strformat("The meeting that %admin_name% started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
-                time:meeting_time ,
+
+
+            var meeting_msg = strformat("The meeting that %admin_name% started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
+                time: meeting_time,
                 date: meeting_date,
-                loglink:meeting_logs,
-admin_name:env.admin_name
+                loglink: meeting_logs,
+                admin_name: env.admin_name
             });
-            
-            send({from:{first_name:env.admin_name},text:meeting_msg});
-            
+
+            send({
+                from: {
+                    first_name: env.admin_name
+                },
+                text: meeting_msg
+            });
+
             bot.sendMessage({
                 chat_id: env.tg_chatId,
                 text: meeting_msg
             })
 
 
-            
+
             //stop logging to file
             wstream.end();
         }
