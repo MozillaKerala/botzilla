@@ -5,10 +5,11 @@ var Bot = require('node-telegram-bot');
 var moment = require('moment');
 var filename = '';
 
+//meeting configs
 var meeting_time = moment().format('hh:mm A');
 var meeting_date = moment().format('DD MMM YY');
 var meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
-var meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY')+'.txt';
+var meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY') + '.txt';
 var wstream;
 
 
@@ -62,6 +63,8 @@ client.addListener('error', function (message) {
 var bot = new Bot({
     token: env.tgbot_token
 }).on('message', function (message) {
+
+    console.log(message);
     //if message is not text (stickers , image.....) then do nothing
     if (!message.text) {
         return;
@@ -86,6 +89,10 @@ var bot = new Bot({
 
     case 'status':
         send_status();
+        return;
+
+    case 'restart':
+        restart();
         return;
 
     default:
@@ -160,7 +167,7 @@ function startmeeting(from) {
             meeting_time = moment().format('hh:mm A');
             meeting_date = moment().format('DD MMM YY');
             meeting_link = 'https://public.etherpad-mozilla.org/p/kerala-' + moment().format('DDMMMYY');
-            meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY')+'.txt';
+            meeting_logs = 'bots.mozillakerala.org/botzilla/logs/' + moment().format('DDMMMYY') + '.txt';
 
 
 
@@ -208,7 +215,7 @@ function stopmeeting(from) {
         } else {
 
 
-            var meeting_msg = strformat("The meeting that %admin_name% started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting at %loglink%", {
+            var meeting_msg = strformat("The meeting that %admin_name% started and chaired from %time% %date% has ended.\nYou can find the public logs of the meeting in the file", {
                 time: meeting_time,
                 date: meeting_date,
                 loglink: meeting_logs,
@@ -228,9 +235,22 @@ function stopmeeting(from) {
             })
 
 
+            client.say(env.channel, meeting_msg);
 
             //stop logging to file
             wstream.end();
+            
+            //Send the log to Telegram
+            bot.sendDocument({
+                chat_id: env.tg_chatId,
+                caption: 'Chat log',
+                files: {
+                    document: filename
+                }
+            }, function (err, msg) {
+                console.log(err);
+                console.log(msg);
+            });
         }
     });
 }
@@ -243,6 +263,19 @@ function send_status() {
     })
 }
 
+
+function restart() {
+//Exit the program and Assume PM2 or Forever will restart the process
+    bot.sendMessage({
+        chat_id: env.tg_chatId,
+        parse_mode: 'Markdown',
+        text: 'Bot will restart * now *'
+    });
+
+    process.exit(1);
+
+
+}
 
 
 function add_log(msg) {
